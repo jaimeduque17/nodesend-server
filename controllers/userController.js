@@ -1,15 +1,22 @@
 
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 
 exports.newUser = async (req, res) => {
+
+    // show errors messages express-validator
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     // check if the user already exist
     const { email, password } = req.body;
 
     let user = await User.findOne({ email });
 
-    if(user) {
+    if (user) {
         return res.status(400).json({ msg: 'The user already exist' });
     }
 
@@ -22,7 +29,7 @@ exports.newUser = async (req, res) => {
 
     try {
         await user.save();
-        res.json({msg: 'User created successfully'});
+        res.json({ msg: 'User created successfully' });
     } catch (error) {
         console.log(error);
     }
