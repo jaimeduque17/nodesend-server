@@ -12,11 +12,11 @@ exports.newLink = async (req, res, next) => {
     }
 
     // create a link object
-    const { original_name } = req.body;
+    const { original_name, name } = req.body;
 
     const link = new Links();
     link.url = shortid.generate();
-    link.name = shortid.generate();
+    link.name = name;
     link.original_name = original_name;
 
     // if the user is authenticated
